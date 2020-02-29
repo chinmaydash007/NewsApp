@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
 //        Log.d("mytag", a)
 //        var article: Article = gson.fromJson(a, Article::class.java)
 //        article.title="lsnadna"
-        var q:String?=null
-        var w=q?:"Hello"
-        Log.d("mytag", w)
+
     }
 }
