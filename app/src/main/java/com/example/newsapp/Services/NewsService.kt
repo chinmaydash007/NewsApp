@@ -8,4 +8,7 @@ import retrofit2.http.QueryMap
 interface NewsService {
     @GET("top-headlines")
     fun getHeadLines(@QueryMap parameters:Map<String,String> ): Call<TopHeadLines>
+
+    @GET("everything")
+    fun getNewsSearch(@QueryMap parameters: Map<String, String>):Call<TopHeadLines>
 }
