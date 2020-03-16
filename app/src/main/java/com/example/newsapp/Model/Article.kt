@@ -1,10 +1,12 @@
 package com.example.newsapp.Model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
-class Article {
+@Parcelize
+class Article : Parcelable {
     @SerializedName("source")
     @Expose
     var source: Source? = null

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:fitsSystemWindows="true"
-        >
+        android:theme="@style/DetailsActivityTheme">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -45,6 +45,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img"
                     android:src="@drawable/top_shadow"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
@@ -61,7 +62,7 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -105,9 +106,10 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.appbar.MaterialToolbar>
+            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -174,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.core.widget.ContentLoadingProgressBar
+                    <ProgressBar
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         android:id="@+id/progress_bar"
                         android:layout_marginTop="50dp"
