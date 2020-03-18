@@ -15,5 +15,4 @@ class News {
     @SerializedName("articles")
     @Expose
     private var article: List<Article>? = null
-
 }

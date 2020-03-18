@@ -5,8 +5,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-class Article : Parcelable {
+
+class Article{
     @SerializedName("source")
     @Expose
     var source: Source? = null

@@ -2,6 +2,7 @@ package com.example.newsapp
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,7 +26,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
+    NewsAdapter.onNewsClick {
     lateinit var newsService: NewsService
 
     lateinit var newsAdapter: NewsAdapter
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         articleList = ArrayList<Article>()
-        newsAdapter = NewsAdapter(articleList, this)
+        newsAdapter = NewsAdapter(articleList, this, this)
         recylerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recylerView.adapter = newsAdapter
         recylerView.itemAnimator = DefaultItemAnimator()
@@ -51,9 +53,26 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
+    override fun onNewsClick(position: Int) {
+        var intent: Intent = Intent(this, DetailActivity::class.java)
+        var bundle = Bundle()
+        bundle.putString("author", articleList.get(position).author)
+        bundle.putString("title", articleList.get(position).title)
+        bundle.putString("description", articleList.get(position).description)
+        bundle.putString("url", articleList.get(position).url)
+        bundle.putString("urlToImage", articleList.get(position).urlToImage)
+        bundle.putString("publishedAt", articleList.get(position).publishedAt)
+        intent.putExtra("news", bundle)
+        startActivity(intent)
+
+
+        startActivity(intent)
+    }
+
+
     fun loadNews(keyword: String) {
         articleList.clear()
-        swipe_refresh.isRefreshing=true
+        swipe_refresh.isRefreshing = true
 
         newsService = ServiceBuilder.buildService(NewsService::class.java)
 
@@ -77,7 +96,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 if (response.isSuccessful)
                     response.body().let { topHeadLines ->
                         topHeadLines?.articles?.let { articleList.addAll(it) }
-                        swipe_refresh.isRefreshing=false
+                        swipe_refresh.isRefreshing = false
 
                         newsAdapter.notifyDataSetChanged()
                     }
@@ -86,8 +105,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             override fun onFailure(call: Call<TopHeadLines>, t: Throwable) {
                 log(t.message.toString())
                 this@MainActivity.showtoast(t.message.toString())
-                swipe_refresh.isRefreshing=false
-                top_headline_textview.visibility=View.INVISIBLE
+                swipe_refresh.isRefreshing = false
+                top_headline_textview.visibility = View.INVISIBLE
 
             }
         })
@@ -142,7 +161,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             loadNews(keyword)
         }
     }
-
 
 
 }

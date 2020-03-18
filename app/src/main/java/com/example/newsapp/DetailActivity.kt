@@ -1,21 +1,24 @@
 package com.example.newsapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebViewClient
+import com.bumptech.glide.Glide
+import com.bumptech.glide.util.Util
+import com.example.newsapp.Model.Article
+import com.example.newsapp.Utils.DateFormat
+import com.example.newsapp.Utils.DateToTimeFormat
+import com.example.newsapp.Utils.log
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlin.math.floor
+import kotlin.math.log
 
 class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     var isHideToolbarView = false
-    lateinit var mUrl: String
-    lateinit var mImg: String
-    lateinit var mTitle: String
-    lateinit var mDate: String
-    lateinit var mSource: String
-    lateinit var mAuthor: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,17 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         supportActionBar?.setTitle("")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         appbar.addOnOffsetChangedListener(this)
+
+        var bundle = intent.getBundleExtra("news")
+
+
+        bundle.let {
+            title_on_appbar.text = bundle.getString("title")
+            subtitle_on_appbar.text = bundle.getString("description")
+            titlee.text = bundle.getString("title")
+            time.text = DateToTimeFormat(bundle.getString("publishedAt"))
+            date.text = DateFormat(bundle.getString("publishedAt"))
+        }
 
 
     }
@@ -56,17 +70,24 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-        var maxScroll: Int? = appbar?.totalScrollRange
-        var percentage = Math.abs(verticalOffset) / (maxScroll as Float)
-        if (percentage == 1f && isHideToolbarView) {
-            date_behavior.visibility = View.GONE
-            title_appbar.visibility = View.VISIBLE
-            isHideToolbarView = !isHideToolbarView
+        val maxScroll: Int? = appbar?.totalScrollRange
+        maxScroll.let {
 
-        } else if (percentage < 1f && isHideToolbarView) {
-            date_behavior.visibility = View.VISIBLE
-            title_appbar.visibility = View.VISIBLE
-            isHideToolbarView = !isHideToolbarView
+            var percentage = Math.abs(verticalOffset.toFloat() / maxScroll?.toFloat()!!) as Float
+            log(percentage.toString())
+            if (percentage == 1.0f && isHideToolbarView) {
+                log("Hello")
+                date_behavior.visibility = View.GONE
+                title_appbar.visibility = View.VISIBLE
+                isHideToolbarView = !isHideToolbarView
+
+            } else if (percentage < 1f && !isHideToolbarView) {
+                log("Bye")
+                date_behavior.visibility = View.VISIBLE
+                title_appbar.visibility = View.GONE
+                isHideToolbarView = !isHideToolbarView
+            }
+
         }
     }
 }
